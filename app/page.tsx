@@ -13,7 +13,7 @@ export default function Home() {
 					</div>
 				</div>
 			</header>
-			<main className="flex-1 container mx-auto max-w-8xl px-4 grid place-content-center bg-hero">
+			<main className="flex-1 container mx-auto max-w-8xl px-4 grid place-content-center bg-hero bg-cover bg-left-top">
 				<div className="space-y-24">
 					<h2 className="font-bold text-8xl text-center leading-tight">
 						Web3 Platform For Selling{" "}

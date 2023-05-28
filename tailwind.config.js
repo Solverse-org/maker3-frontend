@@ -11,7 +11,7 @@ module.exports = {
 				accent: "#00D870",
 			},
 			backgroundImage: {
-				hero: "url('/assets/images/bg-cubes.svg')",
+				hero: "url('../assets/images/bg-cubes.svg')",
 			},
 		},
 	},
