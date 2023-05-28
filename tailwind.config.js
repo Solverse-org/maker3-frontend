@@ -10,6 +10,9 @@ module.exports = {
 			colors: {
 				accent: "#00D870",
 			},
+			backgroundImage: {
+				hero: "url('/assets/images/bg-cubes.svg')",
+			},
 		},
 	},
 	plugins: [],
