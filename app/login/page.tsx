@@ -1,12 +1,15 @@
 import Button from "@/components/button";
 import Logo from "@/components/logo";
+import Link from "next/link";
 
 export default function Login() {
 	return (
 		<div className="bg-black text-white min-h-screen flex flex-col">
 			<header className="py-4">
 				<div className="container mx-auto max-w-6xl px-4">
-					<Logo />
+					<Link href={"/"}>
+						<Logo />
+					</Link>
 				</div>
 			</header>
 			<section className="flex-1 grid place-content-center">
