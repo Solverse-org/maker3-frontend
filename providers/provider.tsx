@@ -1,8 +1,12 @@
 "use client";
 
+import { ThemeProvider } from "@/components/theme-provider";
 import { PropsWithChildren } from "react";
-import { Wallet } from "./wallet";
 
 export default function Provider({ children }: PropsWithChildren) {
-	return <Wallet>{children}</Wallet>;
+	return (
+		<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+			{children}
+		</ThemeProvider>
+	);
 }
