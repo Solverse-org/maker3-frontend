@@ -1,12 +1,27 @@
 "use client";
 
-import Logo from "@/components/logo";
+import Logo from "@/components/Logo";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 export default function Login() {
+	const { connected } = useWallet();
+	const router = useRouter();
+
+	// todo: after wallet is connected check if profile is already there. if it is there go to creator profile page. if not go to create profile page.
+
+	React.useEffect(() => {
+		if (connected) {
+			console.log("wallet is connected");
+			router.push("/create-profile");
+		}
+	}, [connected]);
+
 	return (
-		<div className="bg-black text-white min-h-screen flex flex-col">
+		<div className="min-h-screen flex flex-col">
 			<header className="py-4">
 				<div className="container mx-auto max-w-6xl px-4">
 					<Link href={"/"}>
@@ -16,9 +31,9 @@ export default function Login() {
 			</header>
 			<section className="flex-1 grid place-content-center">
 				<div className="container mx-auto max-w-6xl px-4">
-					<div className="bg-[#101010] rounded-md px-8 py-6 text-[#b7b7b7] flex flex-col items-center gap-4">
-						<h2 className="text-xl">Get started</h2>
-						<WalletMultiButton className="bg-accent text-black rounded-full px-3 py-2 text-sm font-medium " />
+					<div>
+						<h2 className="text-xl">Connect wallet</h2>
+						<WalletMultiButton className="bg-black text-white" />
 					</div>
 				</div>
 			</section>

@@ -1,10 +1,24 @@
+"use client";
+
 import CubeImage from "@/assets/images/cube.svg";
-import Button from "@/components/button";
-import Logo from "@/components/logo";
+import Logo from "@/components/Logo";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import React, { FormEvent } from "react";
 
 export default function CreateProfile() {
+	const [name, setName] = React.useState("");
+	const [email, setEmail] = React.useState("");
+	const [bio, setBio] = React.useState("");
+
+	function onSubmit(e: FormEvent) {
+		e.preventDefault();
+		console.log({ name, email, bio });
+
+		// TODO: upload profile to uri and write data to contract
+	}
+
 	return (
 		<div className="bg-black text-white min-h-screen flex flex-col">
 			<header className="py-4">
@@ -24,12 +38,14 @@ export default function CreateProfile() {
 							<h2 className="text-center text-[#9d9d9d] text-xl font-medium py-4">
 								Create profile
 							</h2>
-							<form className="flex flex-col gap-2 w-full">
+							<form className="flex flex-col gap-2 w-full" onSubmit={onSubmit}>
 								<div className="flex flex-col gap-1">
 									<input
 										id="name"
 										type="text"
 										placeholder="Name"
+										onChange={(e) => setName(e.target.value)}
+										value={name}
 										className="rounded-md h-10 bg-[#272727] placeholder:text-[#4d4d4d] px-4 py-2"
 									/>
 								</div>
@@ -38,6 +54,8 @@ export default function CreateProfile() {
 										id="email"
 										type="email"
 										placeholder="Email"
+										onChange={(e) => setEmail(e.target.value)}
+										value={email}
 										className="rounded-md h-10 bg-[#272727] placeholder:text-[#4d4d4d] px-4 py-2"
 									/>
 								</div>
@@ -45,6 +63,8 @@ export default function CreateProfile() {
 									<textarea
 										id="email"
 										placeholder="Bio"
+										onChange={(e) => setBio(e.target.value)}
+										value={bio}
 										className="bg-[#272727] placeholder:text-[#4d4d4d] px-4 py-2 rounded-md"
 									/>
 								</div>
