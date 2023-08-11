@@ -14,7 +14,6 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { FC, PropsWithChildren, useMemo } from "react";
 
 // Default styles that can be overridden by your app
-require("@solana/wallet-adapter-react-ui/styles.css");
 
 export const Wallet = ({ children }: PropsWithChildren) => {
 	// The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.

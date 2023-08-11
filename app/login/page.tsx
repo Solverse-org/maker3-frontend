@@ -2,24 +2,15 @@
 
 import Logo from "@/components/Logo";
 import { ModeToggle } from "@/components/theme-mode-toggle";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function Login() {
-	const { connected } = useWallet();
 	const router = useRouter();
 
 	// todo: after wallet is connected check if profile is already there. if it is there go to creator profile page. if not go to create profile page.
-
-	React.useEffect(() => {
-		if (connected) {
-			console.log("wallet is connected");
-			router.push("/create-profile");
-		}
-	}, [connected, router]);
 
 	return (
 		<div className="min-h-screen flex flex-col">
@@ -36,7 +27,7 @@ export default function Login() {
 					<Card className="p-4">
 						<CardContent className="mt-2 flex flex-col gap-3 items-center">
 							<h2 className="text-xl">Get started</h2>
-							<Button>Connect wallet</Button>
+							<WalletMultiButton />
 						</CardContent>
 					</Card>
 				</div>
