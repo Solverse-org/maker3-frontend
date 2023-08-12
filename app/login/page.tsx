@@ -12,6 +12,7 @@ import {
 } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { PublicKey } from "@solana/web3.js";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const PROGRAM_ADDRESS = process.env.NEXT_PUBLIC_PROGRAM_ADDRESS;
@@ -21,6 +22,7 @@ export default function Login() {
 	const { connected } = useWallet();
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
+	const router = useRouter();
 
 	React.useEffect(() => {
 		if (!connection || !wallet) return;
@@ -46,6 +48,7 @@ export default function Login() {
 				console.log("found seller");
 			} else {
 				console.log("no seller found");
+				router.push("/create-profile");
 			}
 		}
 		fetchCreatorAccount();
