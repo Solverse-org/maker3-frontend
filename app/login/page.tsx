@@ -18,7 +18,6 @@ import React from "react";
 const PROGRAM_ADDRESS = process.env.NEXT_PUBLIC_PROGRAM_ADDRESS;
 
 export default function Login() {
-	const [provider, setProvider] = React.useState<AnchorProvider | null>(null);
 	const { connected } = useWallet();
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
@@ -30,8 +29,6 @@ export default function Login() {
 		const provider = new AnchorProvider(connection, wallet, {
 			commitment: "confirmed",
 		});
-		setProvider(provider);
-
 		const programId = new PublicKey(
 			"GSgoPM6DQUfXt5Vsom7H8nwQX9NDqQNnNdMDxfNvEQ8s"
 		);
