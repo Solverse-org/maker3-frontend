@@ -16,7 +16,7 @@ export default function Provider({ children }: PropsWithChildren) {
 	return (
 		<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 			<ThirdwebProvider network={network}>
-				<WalletProvider wallets={[new SolflareWalletAdapter()]}>
+				<WalletProvider wallets={[new SolflareWalletAdapter()]} autoConnect>
 					<WalletModalProvider>{children}</WalletModalProvider>
 				</WalletProvider>
 			</ThirdwebProvider>

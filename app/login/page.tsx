@@ -1,16 +1,66 @@
 "use client";
 
+import { IDL, Contract as Maker3Contract } from "@/anchor/types/contract";
 import Logo from "@/components/Logo";
 import { ModeToggle } from "@/components/theme-mode-toggle";
 import { Card, CardContent } from "@/components/ui/card";
+import { AnchorProvider, Program } from "@project-serum/anchor";
+import {
+	useAnchorWallet,
+	useConnection,
+	useWallet,
+} from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { useRouter } from "next/navigation";
+import { PublicKey } from "@solana/web3.js";
 import React from "react";
 
-export default function Login() {
-	const router = useRouter();
+const PROGRAM_ADDRESS = process.env.NEXT_PUBLIC_PROGRAM_ADDRESS;
 
-	// todo: after wallet is connected check if profile is already there. if it is there go to creator profile page. if not go to create profile page.
+export default function Login() {
+	const [provider, setProvider] = React.useState<AnchorProvider | null>(null);
+	const { connected } = useWallet();
+	const { connection } = useConnection();
+	const wallet = useAnchorWallet();
+
+	React.useEffect(() => {
+		if (!connection || !wallet) return;
+
+		const provider = new AnchorProvider(connection, wallet, {
+			commitment: "confirmed",
+		});
+		setProvider(provider);
+
+		const programId = new PublicKey(
+			"GSgoPM6DQUfXt5Vsom7H8nwQX9NDqQNnNdMDxfNvEQ8s"
+		);
+		const program = new Program<Maker3Contract>(IDL, programId);
+
+		async function fetchCreatorAccount() {
+			if (!wallet) return;
+
+			const sellers = await program.account.seller.all();
+			const isSellerPresent = sellers.find(
+				(seller) => seller.account.authority === wallet?.publicKey
+			);
+			if (isSellerPresent) {
+				console.log("found seller");
+			} else {
+				console.log("no seller found");
+			}
+		}
+		fetchCreatorAccount();
+	}, [connection, wallet]);
+
+	React.useEffect(() => {
+		async function fetchProgram() {
+			if (!connected) return;
+			console.log("wallet is connected");
+
+			// TODO: after wallet is connected check if profile is already there. if it is there go to creator profile page. if not go to create profile page.
+		}
+
+		fetchProgram();
+	}, [connected]);
 
 	return (
 		<div className="min-h-screen flex flex-col">

@@ -1,0 +1,48 @@
+{
+  "version": "0.1.0",
+  "name": "contract",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Product",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "seller",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadataUri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Seller",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "metadataUri",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "address": "GSgoPM6DQUfXt5Vsom7H8nwQX9NDqQNnNdMDxfNvEQ8s"
+  }
+}
