@@ -52,7 +52,7 @@ export default function Login() {
 			}
 		}
 		fetchCreatorAccount();
-	}, [connection, wallet]);
+	}, [connection, wallet, router]);
 
 	React.useEffect(() => {
 		async function fetchProgram() {
