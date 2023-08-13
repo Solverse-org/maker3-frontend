@@ -25,6 +25,7 @@
     "@solana/web3.js": "^1.78.1",
     "@thirdweb-dev/react": "^3.14.30",
     "@thirdweb-dev/sdk": "^3.10.49",
+    "@thirdweb-dev/storage": "^1.2.5",
     "@types/node": "20.1.0",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
