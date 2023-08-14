@@ -1,6 +1,7 @@
 import CoverImagePlaceholder from "@/assets/images/cover-image-placeholder.svg";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { FormEvent } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Input } from "./ui/input";
@@ -8,14 +9,43 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 
 export default function CreateProductForm() {
-	const [coverImageFile, setCoverImageFile] = React.useState<string>();
+	const [title, setTitle] = React.useState("");
+	const [price, setPrice] = React.useState("");
+	const [description, setDescription] = React.useState("");
+	const [coverImageFile, setCoverImageFile] = React.useState("");
+	const [coverFile, setCoverFile] = React.useState<File | null>(null);
+	const [productFile, setProductFile] = React.useState<File | null>(null);
+	const [isSubmitFormLoading, setIsSubmitFormLoading] = React.useState(false);
+
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+	async function handleSubmit(e: FormEvent) {
+		e.preventDefault();
+		console.log({ title, price, description, coverFile, productFile });
+
+		const formData = new FormData();
+		formData.set("title", title);
+		formData.set("price", price);
+		formData.set("description", description);
+		formData.set("cover", coverFile!);
+		formData.set("product", productFile!);
+
+		setIsSubmitFormLoading(true);
+		const res = await fetch("http://localhost:3000/create-product/upload", {
+			method: "POST",
+			body: formData,
+		});
+
+		const result = await res.json();
+		console.log(result);
+		setIsSubmitFormLoading(false);
+	}
 
 	return (
 		<Card>
 			<CardHeader>Create product</CardHeader>
 			<CardContent>
-				<form className="flex flex-col gap-2 w-[400px]">
+				<form onSubmit={handleSubmit} className="flex flex-col gap-2 w-[400px]">
 					<div className="mb-2">
 						<Image
 							src={coverImageFile ?? CoverImagePlaceholder}
@@ -30,22 +60,60 @@ export default function CreateProductForm() {
 							type="file"
 							accept="image/*"
 							className="hidden"
+							required
 							onChange={(e) => {
 								const files = e.target.files;
 								if (!files) return;
 								const file = files[0];
 								setCoverImageFile(URL.createObjectURL(file));
+								setCoverFile(file);
 							}}
 						/>
 					</div>
-					<Input type="text" placeholder="Title" />
-					<Input type="number" placeholder="Price (in USD)" />
-					<Textarea placeholder="Description" className="h-36" />
+					<Input
+						type="text"
+						id="title"
+						placeholder="Title"
+						required
+						value={title}
+						onChange={(e) => setTitle(e.target.value)}
+					/>
+					<Input
+						type="number"
+						id="price"
+						placeholder="Price (in USD)"
+						required
+						value={price}
+						onChange={(e) => setPrice(e.target.value)}
+					/>
+					<Textarea
+						placeholder="Description"
+						id="description"
+						className="h-36"
+						required
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+					/>
 					<div className="space-y-1">
 						<Label htmlFor="product-file">Select product file</Label>
-						<Input id="product-file" type="file" />
+						<Input
+							id="product-file"
+							type="file"
+							required
+							onChange={(e) => {
+								const files = e.target.files;
+								if (!files) return;
+								const file = files[0];
+								setProductFile(file);
+							}}
+						/>
 					</div>
-					<Button className="mt-2">Create</Button>
+					<Button className="mt-2">
+						{isSubmitFormLoading && (
+							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+						)}
+						{isSubmitFormLoading ? "Creating profile" : "Create"}
+					</Button>
 				</form>
 			</CardContent>
 		</Card>
