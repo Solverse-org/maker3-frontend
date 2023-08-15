@@ -1,10 +1,12 @@
+import AvatarPlaceholder from "@/assets/images/avatar-placeholder.png";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 import React, { FormEvent } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { Loader2 } from "lucide-react";
 
 export default function CreateProfileForm() {
 	const [name, setName] = React.useState("");
@@ -12,7 +14,8 @@ export default function CreateProfileForm() {
 	const [bio, setBio] = React.useState("");
 	const [avatarFile, setAvatarFile] = React.useState<File | null>(null);
 	const [avatarImageFile, setAvatarImageFile] = React.useState("");
-	const [submitFormLoading, setSubmitFormLoading] = React.useState(false);
+	const [isUploadProfileLoading, setUploadProfileLoading] =
+		React.useState(false);
 
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -27,7 +30,7 @@ export default function CreateProfileForm() {
 		formData.set("bio", bio);
 		formData.set("avatar", avatarFile!);
 
-		setSubmitFormLoading(true);
+		setUploadProfileLoading(true);
 		const res = await fetch("http://localhost:3000/create-profile/upload", {
 			method: "POST",
 			body: formData,
@@ -35,7 +38,7 @@ export default function CreateProfileForm() {
 
 		const result = await res.json();
 		console.log({ result });
-		setSubmitFormLoading(false);
+		setUploadProfileLoading(false);
 
 		// TODO: write data to contract
 	}
@@ -49,9 +52,13 @@ export default function CreateProfileForm() {
 						className="place-self-center w-20 h-20 hover:cursor-pointer mb-3"
 						onClick={() => fileInputRef.current?.click()}
 					>
-						<AvatarImage src={avatarImageFile ?? ""} />
-						<AvatarFallback>
-							{name ? name.substring(0, 2).toUpperCase() : ""}
+						<AvatarImage src={avatarImageFile} />
+						<AvatarFallback className="relative">
+							<Image
+								src={AvatarPlaceholder}
+								alt="avatar placeholder"
+								fill={true}
+							/>
 						</AvatarFallback>
 					</Avatar>
 					<Input
@@ -59,6 +66,7 @@ export default function CreateProfileForm() {
 						type="file"
 						className="hidden"
 						accept="image/*"
+						required
 						onChange={(e) => {
 							const files = e.target.files;
 							if (!files) return;
@@ -70,25 +78,28 @@ export default function CreateProfileForm() {
 					<Input
 						type="text"
 						placeholder="Name"
+						required
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 					/>
 					<Input
 						type="email"
 						placeholder="Email"
+						required
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 					/>
 					<Textarea
 						placeholder="Bio"
 						value={bio}
+						required
 						onChange={(e) => setBio(e.target.value)}
 					/>
 					<Button className="mt-2">
-						{submitFormLoading && (
+						{isUploadProfileLoading && (
 							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
 						)}
-						{submitFormLoading ? "Creating profile" : "Create"}
+						{isUploadProfileLoading ? "Uploading profile" : "Create"}
 					</Button>
 				</form>
 			</CardContent>
