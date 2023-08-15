@@ -1,4 +1,9 @@
+import {
+	createProfileError,
+	createProfileSuccess,
+} from "@/app/create-profile/page";
 import AvatarPlaceholder from "@/assets/images/avatar-placeholder.png";
+import { useSetAtom } from "jotai";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import React, { FormEvent } from "react";
@@ -19,6 +24,9 @@ export default function CreateProfileForm() {
 
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
 
+	const setIsCreateProfileError = useSetAtom(createProfileError);
+	const setIsCreateProfileSuccess = useSetAtom(createProfileSuccess);
+
 	async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		console.log({ name, email, bio, avatarFile });
@@ -38,7 +46,13 @@ export default function CreateProfileForm() {
 
 		const result = await res.json();
 		console.log({ result });
+		if (!result) {
+			setIsCreateProfileError(true);
+			setUploadProfileLoading(false);
+			return;
+		}
 		setUploadProfileLoading(false);
+		setIsCreateProfileSuccess(true);
 
 		// TODO: write data to contract
 	}
