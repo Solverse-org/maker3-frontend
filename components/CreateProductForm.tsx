@@ -1,4 +1,9 @@
+import {
+	createProductError,
+	createProductSuccess,
+} from "@/app/create-product/page";
 import CoverImagePlaceholder from "@/assets/images/cover-image-placeholder.svg";
+import { useSetAtom } from "jotai";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import React, { FormEvent } from "react";
@@ -15,9 +20,13 @@ export default function CreateProductForm() {
 	const [coverImageFile, setCoverImageFile] = React.useState("");
 	const [coverFile, setCoverFile] = React.useState<File | null>(null);
 	const [productFile, setProductFile] = React.useState<File | null>(null);
-	const [isSubmitFormLoading, setIsSubmitFormLoading] = React.useState(false);
+	const [isUploadProductLoading, setIsUploadProductLoading] =
+		React.useState(false);
 
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+	const setIsCreateProductSuccess = useSetAtom(createProductSuccess);
+	const setIsCreateProductError = useSetAtom(createProductError);
 
 	async function handleSubmit(e: FormEvent) {
 		e.preventDefault();
@@ -30,7 +39,7 @@ export default function CreateProductForm() {
 		formData.set("cover", coverFile!);
 		formData.set("product", productFile!);
 
-		setIsSubmitFormLoading(true);
+		setIsUploadProductLoading(true);
 		const res = await fetch("http://localhost:3000/create-product/upload", {
 			method: "POST",
 			body: formData,
@@ -38,7 +47,12 @@ export default function CreateProductForm() {
 
 		const result = await res.json();
 		console.log(result);
-		setIsSubmitFormLoading(false);
+		if (!result) {
+			setIsCreateProductError(true);
+			setIsUploadProductLoading(false);
+		}
+		setIsUploadProductLoading(false);
+		setIsCreateProductSuccess(true);
 	}
 
 	return (
@@ -109,10 +123,10 @@ export default function CreateProductForm() {
 						/>
 					</div>
 					<Button className="mt-2">
-						{isSubmitFormLoading && (
+						{isUploadProductLoading && (
 							<Loader2 className="mr-2 h-4 w-4 animate-spin" />
 						)}
-						{isSubmitFormLoading ? "Creating profile" : "Create"}
+						{isUploadProductLoading ? "Uploading product" : "Create"}
 					</Button>
 				</form>
 			</CardContent>
