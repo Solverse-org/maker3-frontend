@@ -2,12 +2,10 @@ import {
 	createProfileError,
 	createProfileSuccess,
 } from "@/app/create-profile/page";
-import AvatarPlaceholder from "@/assets/images/avatar-placeholder.png";
 import { useSetAtom } from "jotai";
-import { Loader2 } from "lucide-react";
-import Image from "next/image";
+import { Loader2, LucideUserCircle } from "lucide-react";
 import React, { FormEvent } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Input } from "./ui/input";
@@ -66,14 +64,11 @@ export default function CreateProfileForm() {
 						className="place-self-center w-20 h-20 hover:cursor-pointer mb-3"
 						onClick={() => fileInputRef.current?.click()}
 					>
-						<AvatarImage src={avatarImageFile} />
-						<AvatarFallback className="relative">
-							<Image
-								src={AvatarPlaceholder}
-								alt="avatar placeholder"
-								fill={true}
-							/>
-						</AvatarFallback>
+						{avatarImageFile ? (
+							<AvatarImage src={avatarImageFile} />
+						) : (
+							<LucideUserCircle strokeWidth={1} className="w-20 h-20" />
+						)}
 					</Avatar>
 					<Input
 						ref={fileInputRef}
